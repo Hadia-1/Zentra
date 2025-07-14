@@ -1,0 +1,8 @@
+gradio==4.27.0
+scikit-learn==1.4.1
+sentence-transformers==2.2.2
+PyMuPDF==1.23.5
+requests
+numpy
+pickle5
+joblib

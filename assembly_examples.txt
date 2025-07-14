@@ -1,0 +1,860 @@
+1. Hello World
+INCLUDE Irvine32.inc
+.data
+msg byte "Hello World", 0
+.code
+main PROC
+    mov edx, OFFSET msg
+    call WriteString
+    call waitmsg
+main ENDP
+END main
+
+2. Print Numbers 1 to 5
+INCLUDE Irvine32.inc
+.data
+.code
+main PROC
+    mov ecx, 5
+    mov eax, 1
+print_loop:
+    call WriteInt
+    call Crlf
+    inc eax
+    loop print_loop
+    call waitmsg
+main ENDP
+END main
+
+3. Addition of Two Numbers
+INCLUDE Irvine32.inc
+.data
+a dword 10
+b dword 15
+.code
+main PROC
+    mov eax, a
+    add eax, b
+    call WriteInt
+    call waitmsg
+main ENDP
+END main
+
+ 4. Subtraction, Multiplication, Division
+INCLUDE Irvine32.inc
+.data
+x dword 20
+y dword 5
+.code
+main PROC
+    ; Subtraction
+    mov eax, x
+    sub eax, y
+    call WriteInt
+    call Crlf
+
+    ; Multiplication
+    mov eax, x
+    imul y
+    call WriteInt
+    call Crlf
+
+    ; Division
+    mov eax, x
+    cdq
+    idiv y
+    call WriteInt
+    call waitmsg
+main ENDP
+END main
+
+5. Input from User and Display
+INCLUDE Irvine32.inc
+.data
+.code
+main PROC
+    call ReadInt
+    call WriteInt
+    call waitmsg
+main ENDP
+END main
+
+6. Display ASCII Characters A–Z
+INCLUDE Irvine32.inc
+.data
+.code
+main PROC
+    mov ecx, 26
+    mov al, 'A'
+print_ascii:
+    call WriteChar
+    call Crlf
+    inc al
+    loop print_ascii
+    call waitmsg
+main ENDP
+END main
+
+7. Compare Two Numbers
+INCLUDE Irvine32.inc
+.data
+num1 dword 12
+num2 dword 20
+.code
+main PROC
+    mov eax, num1
+    cmp eax, num2
+    jge done
+    mov eax, num2
+done:
+    call WriteInt
+    call waitmsg
+main ENDP
+END main
+
+8. Loop to Sum 1–10
+INCLUDE Irvine32.inc
+.data
+sum dword ?
+.code
+main PROC
+    xor eax, eax
+    mov ecx, 10
+    mov ebx, 1
+sum_loop:
+    add eax, ebx
+    inc ebx
+    loop sum_loop
+    mov sum, eax
+    call WriteInt
+    call waitmsg
+main ENDP
+END main
+
+9. If-Else Logic: Even or Odd
+INCLUDE Irvine32.inc
+.data
+val dword 7
+msgEven byte "Even", 0
+msgOdd byte "Odd", 0
+.code
+main PROC
+    mov eax, val
+    and eax, 1
+    jz even
+    mov edx, OFFSET msgOdd
+    call WriteString
+    jmp done
+even:
+    mov edx, OFFSET msgEven
+    call WriteString
+done:
+    call waitmsg
+main ENDP
+END main
+
+10. Simple Array Traversal
+INCLUDE Irvine32.inc
+.data
+arr dword 5, 10, 15, 20, 25
+.code
+main PROC
+    mov esi, OFFSET arr
+    mov ecx, 5
+print_loop:
+    mov eax, [esi]
+    call WriteInt
+    call Crlf
+    add esi, 4
+    loop print_loop
+    call waitmsg
+main ENDP
+END main
+
+11. Count Vowels in a String
+INCLUDE Irvine32.inc
+.data
+text byte "assembly language", 0
+vowels byte "aeiou", 0
+count dword 0
+.code
+main PROC
+    mov esi, OFFSET text
+next_char:
+    mov al, [esi]
+    cmp al, 0
+    je done
+    push esi
+    mov edi, OFFSET vowels
+    mov ecx, 5
+check_vowel:
+    mov bl, [edi]
+    cmp al, bl
+    je found
+    inc edi
+    loop check_vowel
+    pop esi
+    inc esi
+    jmp next_char
+found:
+    pop esi
+    inc dword ptr [count]
+    inc esi
+    jmp next_char
+done:
+    mov eax, count
+    call WriteInt
+    call waitmsg
+main ENDP
+END main
+
+12. Reverse a String
+INCLUDE Irvine32.inc
+.data
+str byte "HELLO", 0
+len = ($ - str)
+.code
+main PROC
+    mov esi, OFFSET str
+    add esi, len
+    dec esi
+    mov ecx, len
+reverse_loop:
+    mov al, [esi]
+    call WriteChar
+    dec esi
+    loop reverse_loop
+    call Crlf
+    call waitmsg
+main ENDP
+END main
+
+13. Copy One String to Another
+INCLUDE Irvine32.inc
+.data
+src byte "MASM", 0
+dest byte 10 dup(?)
+.code
+main PROC
+    mov esi, OFFSET src
+    mov edi, OFFSET dest
+copy_loop:
+    mov al, [esi]
+    mov [edi], al
+    cmp al, 0
+    je copied
+    inc esi
+    inc edi
+    jmp copy_loop
+copied:
+    mov edx, OFFSET dest
+    call WriteString
+    call waitmsg
+main ENDP
+END main
+
+14. Find Maximum in an Array
+INCLUDE Irvine32.inc
+.data
+arr dword 10, 22, 5, 9, 33
+.code
+main PROC
+    mov esi, OFFSET arr
+    mov eax, [esi]
+    add esi, 4
+    mov ecx, 4
+find_max:
+    cmp [esi], eax
+    jle skip
+    mov eax, [esi]
+skip:
+    add esi, 4
+    loop find_max
+    call WriteInt
+    call waitmsg
+main ENDP
+END main
+
+15. Factorial of 5
+INCLUDE Irvine32.inc
+.data
+.code
+main PROC
+    mov eax, 1
+    mov ecx, 5
+factorial_loop:
+    mul ecx
+    loop factorial_loop
+    call WriteInt
+    call waitmsg
+main ENDP
+END main
+
+16. Fibonacci (First 7 Numbers)
+INCLUDE Irvine32.inc
+.data
+fib dword 1, 1, 0, 0, 0, 0, 0
+.code
+main PROC
+    mov esi, OFFSET fib
+    mov ecx, 5
+next_fib:
+    mov eax, [esi]
+    mov ebx, [esi+4]
+    add eax, ebx
+    mov [esi+8], eax
+    add esi, 4
+    loop next_fib
+
+    mov esi, OFFSET fib
+    mov ecx, 7
+print_fib:
+    mov eax, [esi]
+    call WriteInt
+    call Crlf
+    add esi, 4
+    loop print_fib
+
+    call waitmsg
+main ENDP
+END main
+
+17. Simple Calculator (Add/Sub/Mul/Div)
+INCLUDE Irvine32.inc
+.data
+a dword 12
+b dword 4
+.code
+main PROC
+    ; Addition
+    mov eax, a
+    add eax, b
+    call WriteInt
+    call Crlf
+
+    ; Subtraction
+    mov eax, a
+    sub eax, b
+    call WriteInt
+    call Crlf
+
+    ; Multiplication
+    mov eax, a
+    imul b
+    call WriteInt
+    call Crlf
+
+    ; Division
+    mov eax, a
+    cdq
+    idiv b
+    call WriteInt
+    call Crlf
+
+    call waitmsg
+main ENDP
+END main
+
+18. Palindrome Checker (121)
+INCLUDE Irvine32.inc
+.data
+num dword 121
+temp dword ?
+rev dword 0
+.code
+main PROC
+    mov eax, num
+    mov temp, eax
+    xor ebx, ebx
+
+reverse_loop:
+    mov edx, 0
+    mov ecx, 10
+    div ecx
+    push edx
+    inc ebx
+    test eax, eax
+    jnz reverse_loop
+
+    mov eax, 0
+
+build_rev:
+    pop edx
+    mov ecx, 10
+    mul ecx
+    add eax, edx
+    dec ebx
+    jnz build_rev
+
+    mov rev, eax
+    cmp rev, temp
+    je is_palindrome
+
+    mov edx, OFFSET not_msg
+    call WriteString
+    jmp done
+is_palindrome:
+    mov edx, OFFSET yes_msg
+    call WriteString
+done:
+    call waitmsg
+main ENDP
+.data
+yes_msg byte "Palindrome", 0
+not_msg byte "Not Palindrome", 0
+
+19. Clear Screen and Print
+INCLUDE Irvine32.inc
+.data
+msg byte "Screen Cleared!", 0
+.code
+main PROC
+    call Clrscr
+    mov edx, OFFSET msg
+    call WriteString
+    call waitmsg
+main ENDP
+END main
+
+20. Procedure to Double a Number
+INCLUDE Irvine32.inc
+.data
+num dword 7
+.code
+main PROC
+    mov eax, num
+    call Double
+    call WriteInt
+    call waitmsg
+main ENDP
+
+Double PROC
+    shl eax, 1
+    ret
+Double ENDP
+END main
+
+21. Bubble Sort (5 elements)
+INCLUDE Irvine32.inc
+.data
+arr dword 5, 1, 4, 2, 3
+.code
+main PROC
+    mov ecx, 5
+outer:
+    mov esi, OFFSET arr
+    mov edx, ecx
+    dec edx
+inner:
+    mov eax, [esi]
+    cmp eax, [esi+4]
+    jle no_swap
+    xchg eax, [esi+4]
+    mov [esi], eax
+no_swap:
+    add esi, 4
+    dec edx
+    jnz inner
+    loop outer
+
+    mov esi, OFFSET arr
+    mov ecx, 5
+print_sorted:
+    mov eax, [esi]
+    call WriteInt
+    call Crlf
+    add esi, 4
+    loop print_sorted
+
+    call waitmsg
+main ENDP
+END main
+
+22. Search Element in Array
+INCLUDE Irvine32.inc
+.data
+arr dword 4, 8, 15, 16, 23
+target dword 15
+found_msg byte "Found", 0
+not_msg byte "Not Found", 0
+.code
+main PROC
+    mov esi, OFFSET arr
+    mov ecx, 5
+search_loop:
+    mov eax, [esi]
+    cmp eax, target
+    je found
+    add esi, 4
+    loop search_loop
+    mov edx, OFFSET not_msg
+    call WriteString
+    jmp done
+found:
+    mov edx, OFFSET found_msg
+    call WriteString
+done:
+    call waitmsg
+main ENDP
+END main
+
+23. Display Cursor at Custom Position
+INCLUDE Irvine32.inc
+.data
+msg byte "At (10,5)", 0
+.code
+main PROC
+    mov dh, 5
+    mov dl, 10
+    call Gotoxy
+    mov edx, OFFSET msg
+    call WriteString
+    call waitmsg
+main ENDP
+END main
+
+24. Print User Input String
+INCLUDE Irvine32.inc
+.data
+buffer byte 20 dup(0)
+.code
+main PROC
+    mov edx, OFFSET buffer
+    mov ecx, 20
+    call ReadString
+    mov edx, OFFSET buffer
+    call WriteString
+    call waitmsg
+main ENDP
+END main
+
+25. Use Procedure with Parameters (Sum of 2)
+INCLUDE Irvine32.inc
+.data
+a dword 4
+b dword 5
+.code
+main PROC
+    mov eax, a
+    mov ebx, b
+    call AddTwo
+    call WriteInt
+    call waitmsg
+main ENDP
+
+AddTwo PROC
+    add eax, ebx
+    ret
+AddTwo ENDP
+END main
+
+26.Array Addition with Byte Swapping
+INCLUDE Irvine32.inc
+
+.data
+array1 dword 12345678h, 22345678h, 32345678h, 42345678h, 52345678h, 62345678h, 72345678h, 82345678h, 92345678h, 0A2345678h
+array2 dword 87654321h, 97654321h, 0A7654321h, 0B7654321h, 0C7654321h, 0D7654321h, 0E7654321h, 0F7654321h, 107654321h, 117654321h
+result dword 10 dup(0)
+msg byte "Result: ",0
+
+.code
+main PROC
+    ; Swap bytes in array1
+    mov esi, OFFSET array1
+    mov ecx, 10
+L1:
+    mov eax, [esi]
+    mov edx, eax
+    
+    ; Swap byte 0 and byte 3
+    rol eax, 8       ; Move byte 3 to position 0
+    mov bl, al       ; Save byte 3 (now in al)
+    ror eax, 8       ; Restore original positions
+    
+    ror edx, 24      ; Move byte 0 to position 3
+    mov bh, dl       ; Save byte 0 (now in dl)
+    rol edx, 24      ; Restore original positions
+    
+    ; Clear original bytes
+    and eax, 0FF00FFFFh
+    and eax, 0FFFFFF00h
+    
+    ; Insert swapped bytes
+    or eax, ebx      ; Put byte 3 in position 0
+    shl ebx, 24      ; Prepare to put byte 0 in position 3
+    or eax, ebx      ; Put byte 0 in position 3
+    
+    mov [esi], eax
+    add esi, 4
+    loop L1
+
+    ; Swap bytes in array2
+    mov esi, OFFSET array2
+    mov ecx, 10
+L2:
+    mov eax, [esi]
+    mov edx, eax
+    
+    ; Swap byte 0 and byte 3
+    rol eax, 8
+    mov bl, al
+    ror eax, 8
+    
+    ror edx, 24
+    mov bh, dl
+    rol edx, 24
+    
+    and eax, 0FF00FFFFh
+    and eax, 0FFFFFF00h
+    
+    or eax, ebx
+    shl ebx, 24
+    or eax, ebx
+    
+    mov [esi], eax
+    add esi, 4
+    loop L2
+
+    ; Add the arrays
+    mov esi, OFFSET array1
+    mov edi, OFFSET array2
+    mov ebx, OFFSET result
+    mov ecx, 10
+L3:
+    mov eax, [esi]
+    add eax, [edi]
+    mov [ebx], eax
+    add esi, 4
+    add edi, 4
+    add ebx, 4
+    loop L3
+
+    ; Display result
+    mov edx, OFFSET msg
+    call WriteString
+    call Crlf
+    
+    mov esi, OFFSET result
+    mov ecx, 10
+L4:
+    mov eax, [esi]
+    call WriteHex
+    mov al, ' '
+    call WriteChar
+    add esi, 4
+    loop L4
+    
+    call Crlf
+    call waitmsg
+main ENDP
+END main
+
+27.Fibonacci Sequence
+INCLUDE Irvine32.inc
+
+.data
+fib dword 1, 1, 0, 0, 0, 0, 0
+msg byte "Fibonacci Sequence: ",0
+
+.code
+main PROC
+    mov esi, OFFSET fib
+    mov ecx, 5
+L1:
+    mov eax, [esi]
+    add eax, [esi+4]
+    mov [esi+8], eax
+    add esi, 4
+    loop L1
+
+    mov edx, OFFSET msg
+    call WriteString
+    call Crlf
+    
+    mov esi, OFFSET fib
+    mov ecx, 7
+L2:
+    mov eax, [esi]
+    call WriteDec
+    mov al, ' '
+    call WriteChar
+    add esi, 4
+    loop L2
+    
+    call Crlf
+    call waitmsg
+main ENDP
+END main
+
+28.Palindrome Checker
+INCLUDE Irvine32.inc
+
+.data
+num dword 12321
+temp dword ?
+rev dword 0
+yes_msg byte " is palindrome",0
+no_msg byte " is not palindrome",0
+
+.code
+main PROC
+    mov eax, num
+    call WriteDec
+    
+    mov temp, eax
+    xor ebx, ebx
+    
+reverse_loop:
+    mov edx, 0
+    mov ecx, 10
+    div ecx
+    push edx
+    inc ebx
+    test eax, eax
+    jnz reverse_loop
+
+    mov eax, 0
+    
+build_rev:
+    pop edx
+    mov ecx, 10
+    mul ecx
+    add eax, edx
+    dec ebx
+    jnz build_rev
+
+    mov rev, eax
+    cmp rev, temp
+    je is_palindrome
+
+    mov edx, OFFSET no_msg
+    call WriteString
+    jmp done
+    
+is_palindrome:
+    mov edx, OFFSET yes_msg
+    call WriteString
+    
+done:
+    call Crlf
+    call waitmsg
+main ENDP
+END main
+
+29.Factorial Calculation with For Loop
+INCLUDE Irvine32.inc
+
+.data
+prompt byte "Enter an integer (1-12): ",0
+result byte "Factorial is: ",0
+error_msg byte "Invalid input! Must be between 1-12",0
+n dword ?
+.code
+main PROC
+    ; Get user input
+    mov edx, OFFSET prompt
+    call WriteString
+    call ReadInt
+    mov n, eax
+    
+    ; Validate input (1-12)
+    cmp eax, 1
+    jl invalid
+    cmp eax, 12
+    jg invalid
+    
+    ; Calculate factorial
+    mov ecx, n        ; Initialize counter
+    mov eax, 1        ; Initialize result
+    
+factorial_loop:
+    mul ecx           ; eax = eax * ecx
+    loop factorial_loop
+    
+    ; Display result
+    mov edx, OFFSET result
+    call WriteString
+    call WriteDec
+    jmp done
+    
+invalid:
+    mov edx, OFFSET error_msg
+    call WriteString
+    
+done:
+    call Crlf
+    call waitmsg
+main ENDP
+END main
+
+30.Nested Loops Implementation
+INCLUDE Irvine32.inc
+
+.data
+si_val dword 0
+.code
+main PROC
+    mov esi, 0        ; SI = 0
+    
+    ; Outer loop (a from 4 to 1)
+    mov ecx, 4
+outer_loop:
+    push ecx          ; Save outer loop counter
+    
+    ; Middle loop (b from 10 to 2, step -2)
+    mov ecx, 5
+middle_loop:
+    push ecx          ; Save middle loop counter
+    
+    ; Inner loop (d from 3 to 1)
+    mov ecx, 3
+inner_loop:
+    inc esi           ; SI++
+    loop inner_loop
+    
+    pop ecx           ; Restore middle loop counter
+    loop middle_loop
+    
+    pop ecx           ; Restore outer loop counter
+    loop outer_loop
+    
+    ; Display final SI value
+    mov eax, esi
+    call WriteDec
+    call Crlf
+    
+    call waitmsg
+main ENDP
+END main
+
+31.Sum of Lower 8 Bits in Word Array
+INCLUDE Irvine32.inc
+
+.data
+word_array word 0110100010010001b, 1001001101110011b, 0111110100110111b, 
+               0000100000000001b, 0000001100000011b, 0000110100000111b
+array_size = ($ - word_array) / 2
+sum byte 0
+msg byte "Sum in binary: ",0
+.code
+main PROC
+    mov esi, OFFSET word_array
+    mov ecx, array_size
+    xor eax, eax      ; Clear sum
+    
+sum_loop:
+    mov bx, [esi]     ; Get word
+    mov bl, bl        ; Isolate lower 8 bits
+    add al, bl        ; Add to sum
+    add esi, 2        ; Move to next word
+    loop sum_loop
+    
+    ; Display result
+    mov edx, OFFSET msg
+    call WriteString
+    call WriteBinB    ; Display AL in binary
+    call Crlf
+    
+    call waitmsg
+main ENDP
+END main
